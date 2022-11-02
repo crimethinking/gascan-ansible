@@ -1,0 +1,13 @@
+# Managed by Ansible
+#
+# This file defines users passwords and roles for a HashUserRealm
+#
+# The format is
+#  <username>: <password>[,<rolename> ...]
+#
+# Passwords may be clear text, obfuscated or checksummed.  The class
+# org.mortbay.util.Password should be used to generate obfuscated
+# passwords or password checksums
+#
+
+{{ global_pmm_username }}: BCRYPT:{{ global_pmm_password | password_hash('blowfish') }},user,admin

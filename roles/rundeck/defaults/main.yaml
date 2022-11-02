@@ -1,0 +1,15 @@
+---
+rundeck_enabled: yes
+rundeck_prune_dangling: yes
+
+rundeck_container_env_file: /etc/rdba/rundeck/server/config/env.cfg
+rundeck_container_realm_file: /etc/rdba/rundeck/server/config/realm.properties
+rundeck_container_extra_args: ' --ulimit=host -p 127.0.0.1:4440:4440 --volume /dev/null:/home/rundeck/etc/rundeckpro-license.key --volume /etc/rdba/rundeck/server/config/realm.properties:/home/rundeck/server/config/realm.properties --volume rundeck-data:/home/rundeck/server/data '
+rundeck_container_image_repo: '{{ "docker.io/rundeck" }}'
+rundeck_container_port: 4440
+rundeck_container_volume: rundeck-data
+
+rundeck_deploy_using: podman
+
+rundeck_version: 4.7.0
+...

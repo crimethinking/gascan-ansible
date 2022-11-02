@@ -1,0 +1,54 @@
+---
+# TODO: Currently, we are deploying only podman containers
+#       The following would also be desirable:
+#       - Docker
+- block:
+    - block:
+        - name: Create directories
+          ansible.builtin.file:
+            path: '{{ rundeck_container_env_file | dirname }}'
+            state: directory
+            owner: root
+            group: root
+            mode: u=rwX,g=rX,o=X
+
+        - name: Manage container environment file
+          ansible.builtin.template:
+            src: env.cfg.j2
+            dest: '{{ rundeck_container_env_file }}'
+            owner: root
+            group: root
+            mode: u=rw,a=r
+          register: rundeck_container_manage_env_file
+
+        - name: Manage container realm authentication file
+          ansible.builtin.template:
+            src: realm.properties.j2
+            dest: '{{ rundeck_container_realm_file}}'
+            owner: root
+            group: root
+            mode: u=rw,a=r
+          register: rundeck_container_manage_realm_file
+      become: true
+      tags:
+        - sudo
+
+    - name: Configure the containerization environment
+      ansible.builtin.include_role:
+        name: container
+      vars:
+        container_env_file: '{{ rundeck_container_env_file }}'
+        container_force_reload: '{{ rundeck_container_manage_env_file.changed | bool or rundeck_container_manage_realm_file.changed | bool }}'
+        container_image: '{{ rundeck_container_image_repo }}/rundeck:{{ rundeck_version }}'
+        container_port: '{{ rundeck_container_port }}'
+        container_service:
+          name: rundeck
+          extra_args: '{{ rundeck_container_extra_args }}'
+        container_volume: '{{ rundeck_container_volume }}'
+  when: ([rundeck_deploy_using] | intersect('podman') | length > 0)
+
+    #- name: Configure Rundeck
+    #ansible.builtin.include_tasks: configure.yaml
+    #tags:
+    #- always
+...
