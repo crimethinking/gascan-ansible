@@ -1,3 +1,2 @@
 ---
-rundeck_custom_image: 'rundeck/rundeck:{{ rundeck_version }}'
 ...

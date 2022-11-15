@@ -9,7 +9,7 @@ rundeck_container_image_repo: '{{ "docker.io/rundeck" }}'
 rundeck_container_port: 4440
 rundeck_container_volume: rundeck-data
 
-rundeck_deploy_using: podman
+rundeck_deploy_using: '{{ container_engine | mandatory }}'
 
 rundeck_version: 4.7.0
 ...
