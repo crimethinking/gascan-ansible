@@ -1,0 +1,15 @@
+---
+- name: Run preflight checks
+  ansible.builtin.import_playbook: assertions.yaml
+  tags:
+    - always
+
+- name: Setup Rundeck server
+  hosts: monitors
+  gather_facts: false
+  tags:
+    - rundeck
+
+  roles:
+    - role: rundeck
+...
