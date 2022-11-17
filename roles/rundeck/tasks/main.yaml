@@ -21,7 +21,7 @@
             mode: u=rw,a=r
           register: rundeck_container_manage_env_file
 
-        - name: Manage container realm authentication file
+        - name: Manage container Rundeck users file
           ansible.builtin.template:
             src: realm.properties.j2
             dest: '{{ rundeck_container_realm_file }}'
@@ -32,11 +32,6 @@
       become: true
       tags:
         - sudo
-
-    - name: Manage Rundeck users
-      ansible.builtin.include_tasks: manage-users.yaml
-      tags:
-        - always
 
     - name: Configure the containerization environment
       ansible.builtin.include_role:

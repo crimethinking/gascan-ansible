@@ -24,5 +24,10 @@ rundeck_container_volume: rundeck-data
 
 rundeck_deploy_using: '{{ container_engine | mandatory }}'
 
+rundeck_manage_users:
+  - username: admin
+    password: admin 
+    role: user,admin
+
 rundeck_version: 4.8.0
 ...

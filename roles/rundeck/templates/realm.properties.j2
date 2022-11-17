@@ -6,3 +6,6 @@
 # Passwords may be clear text, obfuscated or checksummed.  The class
 # org.mortbay.util.Password should be used to generate obfuscated
 # passwords or password checksums
+{% for user in rundeck_manage_users %}
+{{ user.username }}: {{ user.password }},{{ user.role }}
+{% endfor %}
