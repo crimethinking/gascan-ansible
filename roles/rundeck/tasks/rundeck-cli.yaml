@@ -9,7 +9,6 @@
     src: '{{ rundeck_cli_tarball_name }}'
     dest: '{{ rundeck_cli_user_bin_dir }}'
 
-# line: "alias rd='podman run --rm -it --entrypoint '["java", "-jar", "/app/{{ rundeck_cli_tarball | basename }}.jar"]' -v {{ rundeck_cli_user_bin_dir }}/{{ rundeck_cli_tarball | basename }}.jar:/app/{{ rundeck_cli_user_bin_dir }}/{{ rundeck_cli_tarball | basename }}.jar:z rundeck/rundeck:{{ rundeck_version }}'
 - name: Add alias for Rundeck CLI
   ansible.builtin.lineinfile:
     path: '{{ ansible_env.HOME }}/.bashrc'
