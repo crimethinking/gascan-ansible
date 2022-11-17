@@ -6,9 +6,16 @@
   ansible.builtin.shell: podman exec '{{ rundeck_container_name }}' sudo unzip -qqo {{ rundeck_cli_url | basename }} -d {{ rundeck_cli_container_path }}
 
 - name: Create symlink to Rundeck CLI inside the container
-  ansible.builtin.shell: podman exec '{{ rundeck_container_name }}' 
-    sudo ln -sf {{ rundeck_cli_container_path }}/{{ rundeck_cli_url | basename | splitext | first }}/bin/rd {{ rundeck_cli_container_path }}/rd
+  ansible.builtin.shell: podman exec '{{ rundeck_container_name }}' sudo ln -sf {{ rundeck_cli_container_path }}/{{ rundeck_cli_url | basename | splitext | first }}/bin/rd {{ rundeck_cli_container_path }}/rd
 
 - name: Clean up Rundeck CLI artifact inside the container
   ansible.builtin.shell: podman exec '{{ rundeck_container_name }}' rm -f {{ rundeck_cli_url | basename }}
+
+- name: Add alias for Rundeck CLI
+  ansible.builtin.lineinfile:
+    path: '{{ ansible_env.HOME }}/.bashrc'
+    create: yes
+    line: "alias rd='podman exec -it '{{ rundeck_container_name }}' rd'"
+    owner: '{{ ansible_env.USER }}'
+    mode: u=rw,g=r,o=
 ...
