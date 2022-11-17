@@ -1,21 +1,20 @@
 ---
-- name: Download the Rundeck CLI inside the container
-  ansible.builtin.shell: podman exec '{{ rundeck_container_name }}' wget {{ rundeck_cli_url }}
+- name: Ensure user bin directory exists
+  ansible.builtin.file:
+    path: '{{ rundeck_cli_user_bin_dir }}'
+    state: directory
 
-- name: Unpack the Rundeck CLI inside the container
-  ansible.builtin.shell: podman exec '{{ rundeck_container_name }}' sudo unzip -qqo {{ rundeck_cli_url | basename }} -d {{ rundeck_cli_container_path }}
+- name: Extract Rundeck CLI tarball
+  ansible.builtin.unarchive:
+    src: '{{ rundeck_cli_tarball_name }}'
+    dest: '{{ rundeck_cli_user_bin_dir }}'
 
-- name: Create symlink to Rundeck CLI inside the container
-  ansible.builtin.shell: podman exec '{{ rundeck_container_name }}' sudo ln -sf {{ rundeck_cli_container_path }}/{{ rundeck_cli_url | basename | splitext | first }}/bin/rd {{ rundeck_cli_container_path }}/rd
-
-- name: Clean up Rundeck CLI artifact inside the container
-  ansible.builtin.shell: podman exec '{{ rundeck_container_name }}' rm -f {{ rundeck_cli_url | basename }}
-
+# line: "alias rd='podman run --rm -it --entrypoint '["java", "-jar", "/app/{{ rundeck_cli_tarball | basename }}.jar"]' -v {{ rundeck_cli_user_bin_dir }}/{{ rundeck_cli_tarball | basename }}.jar:/app/{{ rundeck_cli_user_bin_dir }}/{{ rundeck_cli_tarball | basename }}.jar:z rundeck/rundeck:{{ rundeck_version }}'
 - name: Add alias for Rundeck CLI
   ansible.builtin.lineinfile:
     path: '{{ ansible_env.HOME }}/.bashrc'
     create: yes
-    line: "alias rd='podman exec -it '{{ rundeck_container_name }}' rd'"
+    line: "alias rd=\"podman run --rm -it --entrypoint='[\\\"java\\\", \\\"-jar\\\", \\\"/app/{{ rundeck_cli_filename }}\\\"]' -v {{ rundeck_cli_user_bin_dir }}/{{ rundeck_cli_filename }}:/app/{{ rundeck_cli_filename }}:z {{ rundeck_container_image_repo }}/rundeck:{{ rundeck_version }}\""
     owner: '{{ ansible_env.USER }}'
     mode: u=rw,g=r,o=
 ...

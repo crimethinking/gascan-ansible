@@ -10,8 +10,10 @@ rundeck_container_image_repo: '{{ "docker.io/rundeck" }}'
 rundeck_container_port: 4440
 rundeck_container_volume: rundeck-data
 
-rundeck_cli_url: "https://github.com/rundeck/rundeck-cli/releases/download/v2.0.3/rd-2.0.3.zip"
-rundeck_cli_container_path: /usr/local/bin
+rundeck_cli_tarball_name: 'rundeck-cli-{{ rundeck_cli_version }}-all.tar.xz'
+rundeck_cli_filename: 'rundeck-cli-{{ rundeck_cli_version }}-all.jar'
+rundeck_cli_tmp_dir: '/tmp/{{ rundeck_cli_url | basename | splitext | first }}'
+rundeck_cli_user_bin_dir: '{{ ansible_env.HOME }}/bin'
 
 rundeck_deploy_using: '{{ container_engine | mandatory }}'
 
@@ -22,4 +24,5 @@ rundeck_manage_users:
     role: user,admin
 
 rundeck_version: 4.8.0
+rundeck_cli_version: 2.0.3
 ...

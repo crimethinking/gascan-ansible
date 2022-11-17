@@ -46,7 +46,7 @@
           extra_args: '{{ rundeck_container_extra_args }}'
         container_volume: '{{ rundeck_container_volume }}'
 
-    - name: Install Rundeck CLI inside the container
+    - name: Install Rundeck CLI
       ansible.builtin.include_tasks: rundeck-cli.yaml
   when: ([rundeck_deploy_using] | intersect('podman') | length > 0)
 ...
