@@ -1,17 +1,4 @@
 ---
-# It is necessary to set rundeck_admin_credentials via your inventory
-# This should ideally be encrypted and use either of the following in your environment:
-# - ANSIBLE_VAULT_PASSWORD_FILE=/path/to/secret
-# - ANSIBLE_ASK_VAULT_PASS=1
-# Other environment variables my be required, such as ANSIBLE_VAULT_IDENTITY
-# Use the form username:password
-# Automation will process the value as follows:
-# rundeck_admin_credentials | split(":")
-# if empty then fail
-# else presume a username and password
-rundeck_admin_credentials: "admin:admin"
-rundeck_admin_set_password: true
-
 rundeck_enabled: yes
 rundeck_prune_dangling: yes
 
@@ -24,6 +11,7 @@ rundeck_container_volume: rundeck-data
 
 rundeck_deploy_using: '{{ container_engine | mandatory }}'
 
+# CHANGE DEFAULT CREDENTIALS IN OVERRIDES OR SECRET FILE BEFORE DEPLOYMENT
 rundeck_manage_users:
   - username: admin
     password: admin 
