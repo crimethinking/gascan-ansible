@@ -24,7 +24,7 @@
         - name: Manage container realm authentication file
           ansible.builtin.template:
             src: realm.properties.j2
-            dest: '{{ rundeck_container_realm_file}}'
+            dest: '{{ rundeck_container_realm_file }}'
             owner: root
             group: root
             mode: u=rw,a=r
@@ -32,6 +32,11 @@
       become: true
       tags:
         - sudo
+
+    - name: Manage Rundeck users
+      ansible.builtin.include_tasks: manage-users.yaml
+      tags:
+        - always
 
     - name: Configure the containerization environment
       ansible.builtin.include_role:
@@ -46,9 +51,4 @@
           extra_args: '{{ rundeck_container_extra_args }}'
         container_volume: '{{ rundeck_container_volume }}'
   when: ([rundeck_deploy_using] | intersect('podman') | length > 0)
-
-    #- name: Configure Rundeck
-    #ansible.builtin.include_tasks: configure.yaml
-    #tags:
-    #- always
 ...
