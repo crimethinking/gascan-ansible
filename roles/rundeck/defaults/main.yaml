@@ -15,7 +15,7 @@ rundeck_cli_filename: 'rundeck-cli-{{ rundeck_cli_version }}-all.jar'
 rundeck_cli_tmp_dir: '/tmp/{{ rundeck_cli_url | basename | splitext | first }}'
 rundeck_cli_user_bin_dir: '{{ ansible_env.HOME }}/bin'
 
-rundeck_deploy_using: '{{ container_engine_choices | first }}'
+rundeck_deploy_using: '{{ container_engine | default("podman") }}'
 
 # CHANGE DEFAULT CREDENTIALS IN OVERRIDES OR SECRET FILE BEFORE DEPLOYMENT
 rundeck_manage_users:
