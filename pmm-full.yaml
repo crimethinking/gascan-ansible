@@ -16,4 +16,11 @@
   tags:
   - pmm
   - client
+
+- name: Rundeck
+  ansible.builtin.import_playbook: rundeck.yaml
+  tags:
+  - rundeck
+  - server
+  - client
 ...
