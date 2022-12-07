@@ -5,7 +5,7 @@ rundeck_prune_dangling: yes
 rundeck_container_name: rundeck
 rundeck_container_env_file: /usr/local/percona/rundeck/env.cfg
 rundeck_container_realm_file: /usr/local/percona/rundeck/realm.properties
-rundeck_container_extra_args: '--ulimit=host -p 127.0.0.1:4440:4440 --volume /dev/null:/home/rundeck/etc/rundeckpro-license.key --volume {{ rundeck_container_realm_file }}:/home/rundeck/server/config/realm.properties --volume {{ rundeck_container_volume }}:/home/rundeck/server/data'
+rundeck_container_extra_args: '--ulimit=host -p 127.0.0.1:4440:4440 --volume /dev/null:/usr/bin/sudo --volume /dev/null:/home/rundeck/etc/rundeckpro-license.key --volume {{ rundeck_container_realm_file }}:/home/rundeck/server/config/realm.properties --volume {{ rundeck_container_volume }}:/home/rundeck/server/data'
 rundeck_container_image_repo: '{{ "docker.io/rundeck" }}'
 rundeck_container_port: 4440
 rundeck_container_volume: rundeck-data
