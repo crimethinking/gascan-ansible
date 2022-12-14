@@ -36,6 +36,7 @@
         name: '{{ container_service.name }}'
         daemon_reload: '{{ container_service_unit.changed|bool }}'
         enabled: true
+        scope: user
         state: '{{ "restarted" if (container_service_unit.changed|bool or container_force_reload|bool) else "started" }}'
   when: container_service.name is defined and container_rootless
 
