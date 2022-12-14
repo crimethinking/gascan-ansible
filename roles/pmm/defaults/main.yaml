@@ -52,7 +52,7 @@ pmm_container_image_repo: '{{ "docker.io/perconalab" if [pmm_version]|intersect(
 pmm_container_port: 8443
 pmm_container_volume: pmm-data
 
-pmm_deploy_using: podman
+pmm_deploy_using: '{{ container_engine | default("podman") }}'
 
 pmm_manage_users: []
 # - user: xxx
