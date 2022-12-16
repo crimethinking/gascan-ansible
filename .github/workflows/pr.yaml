@@ -28,8 +28,8 @@ jobs:
 
       - name: Generate inventory
         run: |
-          echo 'monitor connection=local ansible_host=localhost pmm_admin_set_password=false pmm_pagerduty_token=00000000000000000000000000000000 pmm_version=2.33.0' > inventory.ini
-          echo 'db1 connection=local ansible_host=localhost' >> inventory.ini
+          echo 'monitor ansible_connection=local ansible_host=localhost pmm_admin_set_password=false pmm_pagerduty_token=00000000000000000000000000000000 pmm_version=2.33.0' > inventory.ini
+          echo 'db1 ansible_connection=local ansible_host=localhost' >> inventory.ini
           echo -e '[monitors]\nmonitor' >> inventory.ini
           echo -e '[mysql]\ndb1\n[mongodb]\ndb1\n[postgresql]\ndb1' >> inventory.ini
           echo -e '[pmm_client]\n[ha]\n[haproxy]\n[proxysql]\n[rds]\n[cloud]\n[azure]\n[cloudsql]\n[dbservers]' >> inventory.ini
