@@ -1,0 +1,40 @@
+---
+name: CI
+on:
+  pull_request:
+    branches:
+    - main
+    paths:
+    - '**.yaml'
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Prepare Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Prepare Ansible
+        run: |
+          python3 -m pip install ansible==6.6.0 jmespath dnspython
+          ansible-config dump
+
+      - name: Checkout codebase
+        uses: actions/checkout@v3
+
+      - name: Generate inventory
+        run: |
+          echo 'monitor connection=local ansible_host=localhost pmm_admin_set_password=false pmm_pagerduty_token=00000000000000000000000000000000 pmm_version=2.33.0' > inventory.ini
+          echo 'db1 connection=local ansible_host=localhost' >> inventory.ini
+          echo -e '[mysql]\ndb1\n[mongodb]\ndb1\n[postgresql]\ndb1' >> inventory.ini
+          echo -e '[pmm_client]\n[ha]\n[haproxy]\n[proxysql]\n[rds]\n[cloud]\n[azure]\n[cloudsql]\n[dbservers]' >> inventory.ini
+
+      - name: Perform full-run
+        run: |
+          ansible-playbook -i inventory.ini pmm-full.yaml
+
+...
