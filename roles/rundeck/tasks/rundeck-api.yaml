@@ -1,0 +1,44 @@
+---
+- name: Login to Rundeck API and store JSESSIONID cookie for later use
+  ansible.builtin.uri:
+    url: '{{ rundeck_server_uri }}/j_security_check'
+    method: POST
+    validate_certs: '{{ rundeck_server_insecure }}'
+    body_format: form-urlencoded
+    body:
+      j_username: '{{ rundeck_manage_users[0].username }}'
+      j_password: '{{ rundeck_manage_users[0].password }}'
+    status_code:
+    - 302
+  register: rundeck_api_login
+
+- name: Create Rundeck project
+  ansible.builtin.uri:
+    url: '{{ rundeck_server_uri }}{{ rundeck_api_base }}{{ rundeck_api_base_version }}/projects'
+    method: POST
+    validate_certs: '{{ rundeck_server_insecure }}'
+    body_format: json
+    body:
+      name: test
+      config:
+        ansible-binaries-dir-path": "/usr/bin/ansible"
+        project.ansible-become: "true"
+        project.ansible-become-method: "sudo"
+        project.ansible-executable: "/bin/bash"
+        project.ansible-ssh-auth-type: "privateKey"
+        project.ansible-ssh-user: "percona"
+        project.ssh-authentication: "privateKey"
+        project.ssh-keypath: "/home/rundeck/.ssh/gascan_ed25519"
+        service.NodeExecutor.default.provider: "com.batix.rundeck.plugins.AnsibleNodeExecutor"
+    headers:
+      Cookie: '{{ rundeck_api_login.set_cookie }}'
+      Accept: application/json
+    status_code:
+    - 201
+    - 409
+  register: rundeck_list_projects
+
+- name: debug list projects
+  ansible.builtin.debug:
+    var: rundeck_list_projects
+...

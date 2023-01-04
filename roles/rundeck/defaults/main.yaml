@@ -17,11 +17,27 @@ rundeck_cli_user_bin_dir: '{{ ansible_env.HOME }}/bin'
 
 rundeck_deploy_using: '{{ container_engine | default("podman") }}'
 
-# CHANGE DEFAULT CREDENTIALS IN OVERRIDES OR SECRET FILE BEFORE DEPLOYMENT
+# Change default credentials in overrides before deployment
+# Multiple users supported, admin user should always be first on the list
+# See Rundeck documentation for valid role assignments
+# Example:
+# rundeck_manage_users:
+#   - username: adminuser
+#     password: changeme
+#     role: user,admin
+#   - username: user1
+#     password: changeme
+#     role: user
+#   - ...
 rundeck_manage_users:
   - username: admin
     password: admin 
     role: user,admin
+
+rundeck_server_host: localhost
+rundeck_server_insecure: '{{ [rundeck_server_host] | intersect(["localhost", "127.0.0.1"]) | length == 0 }}'
+rundeck_server_port: '{{ rundeck_container_port }}'
+rundeck_server_schema: http
 
 rundeck_version: 4.8.0
 rundeck_cli_version: 2.0.3

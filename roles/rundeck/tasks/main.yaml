@@ -48,5 +48,8 @@
 
     - name: Install Rundeck CLI
       ansible.builtin.include_tasks: rundeck-cli.yaml
+
+    - name: Manage Rundeck server API
+      ansible.builtin.include_tasks: rundeck-api.yaml
   when: ([rundeck_deploy_using] | intersect('podman') | length > 0)
 ...

@@ -1,2 +1,25 @@
 ---
+rundeck_api_base: '/api'
+rundeck_api_base_version: '/41'
+  #pmm_api_inventory: '{{ pmm_api_base }}/inventory'
+  #pmm_api_management: '{{ pmm_api_base }}/management'
+  #pmm_api_readyz: '{{ pmm_api_base }}/readyz'
+  #pmm_api_settings: '{{ pmm_api_base }}/Settings'
+  #pmm_api_version: '{{ pmm_api_base }}/version'
+  #pmm_api_alerting_rules_create: '{{ pmm_api_base }}/management/alerting/Rules/Create'
+  #pmm_api_alerting_templates_create: '{{ pmm_api_base }}/management/alerting/Templates/Create'
+  #pmm_api_alerting_templates_list: '{{ pmm_api_base }}/management/alerting/Templates/List'
+
+  #pmm_grafana_base: '/graph'
+  #pmm_grafana_api: '{{ pmm_grafana_base }}/api'
+  #pmm_grafana_api_password: '{{ pmm_grafana_api }}/user/password'
+  #pmm_grafana_api_tokens: '{{ pmm_grafana_api }}/auth/keys'
+  #pmm_grafana_api_users: '{{ pmm_grafana_api }}/admin/users'
+  #pmm_grafana_login: '{{ pmm_grafana_base }}/login'
+  #pmm_grafana_alerting_rules_list: '{{ pmm_grafana_api }}/ruler/grafana/api/v1/rules/'
+  #pmm_grafana_alerting_folder_create: '{{ pmm_grafana_api }}/folders'
+  #pmm_grafana_alerting_contactpoint: '{{ pmm_grafana_api }}/v1/provisioning/contact-points'
+  #pmm_grafana_alerting_notification: '{{ pmm_grafana_api }}/alertmanager/grafana/config/api/v1/alerts'
+
+rundeck_server_uri: '{{ rundeck_server_schema }}://{{ rundeck_server_host }}:{{ rundeck_server_port }}'
 ...
