@@ -127,7 +127,7 @@
 
 - name: Delete template file
   ignore_errors: yes
-  file:
+  ansible.builtin.file:
     state: absent
     path: '/tmp/alerting-template.yaml'
   changed_when: false
