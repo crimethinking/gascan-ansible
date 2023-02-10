@@ -88,6 +88,26 @@
   when: "{{ item.labels.service in pmm_enable_all_templates_for_service }}"
   loop: "{{ pmm_alerting_templates['templates'] }}"
 
+- name: Get updated templates
+  ansible.builtin.uri:
+    url: '{{ pmm_server_uri }}{{ pmm_api_alerting_templates_list }}'
+    method: POST
+    user: '{{ pmm_api_credentials[0] }}'
+    password: '{{ pmm_api_credentials[1] }}'
+    body: {"title":"{{ pmm_template_folder }}"}
+    force_basic_auth: yes
+    status_code:
+      - 200
+      - 409
+    body_format: json
+    validate_certs: '{{ pmm_server_insecure }}'
+    return_content: true
+  register: pmm_get_updated_templates
+
+- name: Set pmm_updated_alert_templates
+  ansible.builtin.set_fact:
+    pmm_updated_alert_templates: "{{ pmm_get_updated_templates.json | json_query('templates[*].name')}}"
+
 - name: Delete Current Alert rules
   ansible.builtin.uri:
     url: '{{ pmm_server_uri }}{{ pmm_grafana_alerting_rules_delete }}'
@@ -118,7 +138,7 @@
 
 - name: Set pmm_existing_alert_rules
   ansible.builtin.set_fact:
-    pmm_existing_alert_rules: '{{ pmm_get_alert_rules.json | json_query("" + pmm_template_folder + "[*].rules[*].annotations[].rule") }}'
+    pmm_existing_alert_rules: '{{ pmm_get_alert_rules.json | json_query(""+ pmm_template_folder + "[*].rules[*].grafana_alert[].title")}}'
 
 - ansible.builtin.include_tasks: alerting-alerts.yaml
   vars:

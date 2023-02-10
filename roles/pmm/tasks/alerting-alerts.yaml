@@ -11,7 +11,7 @@
 - name: Check Template
   ansible.builtin.debug:
     msg: "Template name '{{ prefix_template_name }}' does not exist."
-  when: prefix_template_name not in pmm_existing_alert_templates
+  when: prefix_template_name not in pmm_updated_alert_templates
 
 - block:
     - name: Clear Params and Set names
@@ -20,7 +20,7 @@
 
     - name: Get Params
       ansible.builtin.set_fact:
-        pmm_all_templates: "{{ pmm_get_alert_templates.json['templates'] | selectattr('name', 'equalto', prefix_template_name) | map(attribute='params') | flatten | default('') }}"
+        pmm_all_templates: "{{ pmm_get_updated_templates.json['templates'] | selectattr('name','equalto', prefix_template_name ) | map(attribute='params')| flatten | default('') }}"
       ignore_errors: true
       no_log: true
 
@@ -70,4 +70,5 @@
           - 409
         body_format: json
         validate_certs: '{{ pmm_server_insecure }}'
-  when: (pmm_get_alert_rules == "" or (prefix_alert_name is defined and prefix_alert_name not in pmm_existing_alert_rules)) and prefix_template_name in pmm_existing_alert_templates
+  when: (pmm_get_alert_rules == "" or (prefix_alert_name is defined and prefix_alert_name not in pmm_existing_alert_rules)) and prefix_template_name in pmm_updated_alert_templates
+  
