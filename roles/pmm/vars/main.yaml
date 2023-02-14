@@ -64,7 +64,7 @@ pmm_payload_add_postgresql_base:
   database: postgres
   query_source: pgstatements
   service_name: '{{ inventory_hostname }}-postgresql'
-  socket: /var/run/postgresql/.s.PGSQL.5432
+  socket: /var/run/postgresql
 pmm_payload_add_proxysql_base:
   host: 127.0.0.1
   port: 6032
