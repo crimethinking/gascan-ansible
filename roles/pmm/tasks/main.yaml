@@ -16,21 +16,16 @@
           ansible.builtin.file:
             path: '{{ pmm_container_env_file | dirname }}'
             state: directory
-            owner: root
-            group: root
+            owner: '{{ ansible_env.USER }}'
             mode: u=rwX,g=rX,o=X
 
         - name: Manage the container environment file
           ansible.builtin.template:
             src: env-pmm-server.j2
             dest: '{{ pmm_container_env_file }}'
-            owner: root
-            group: root
-            mode: u=rw,a=r
+            owner: '{{ ansible_env.USER }}'
+            mode: u=rw,g=r,o=r
           register: pmm_container_manage_env_file
-      become: true
-      tags:
-        - sudo
 
     - name: Configure the containerisation enviroment
       ansible.builtin.include_role:
