@@ -22,6 +22,15 @@
             path: ~/.config/systemd/user
             state: directory
             mode: u=rwX,g=rX,o=
+        
+        # Why does this block get to run with sudo
+        # When there's no become and untagged with sudo
+        # The flow from main -> rootless -> podman to this point has sudo at certain required tasks, but none invoking this
+        # block, this task and block does not inherit elevation, at least that's what I found reading the code
+        # Yet debugging shows that it runs with sudo
+        - name: debug
+          ansible.builtin.debug:
+            var: ansible_env
 
         - name: Create the systemd unit file
           ansible.builtin.template:
